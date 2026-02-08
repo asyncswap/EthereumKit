@@ -2,16 +2,6 @@
 
 A modern, Swift-native Ethereum JSON-RPC client built with Swift Concurrency (async/await). Perfect for iOS, macOS, watchOS, and tvOS applications.
 
-## Features
-
-- ✅ **Pure Swift**
-- ✅ **Swift Concurrency** - Built with async/await and actors
-- ✅ **Type-Safe** - Full Codable support with compile-time safety
-- ✅ **Cross-Platform** - Works on iOS 16+, macOS 13+, watchOS 9+, tvOS 16+
-- ✅ **Lightweight** - Zero external dependencies
-- ✅ **ERC-20 Support** - Built-in helpers for token interactions
-- ✅ **Network Configs** - Pre-configured for popular networks (Ethereum, Polygon, Arbitrum, Base, Optimism, Unichain)
-
 ## Installation
 
 ### Swift Package Manager
@@ -38,7 +28,7 @@ Or in Xcode:
 import EthereumKit
 
 // Initialize the service
-let service = EthereumService(rpcURL: "https://mainnet.infura.io/v3/YOUR_API_KEY")
+let service = EthereumService(rpcURL: "https://ethereum-rpc.publicnode.com")
 
 // Get latest block number
 let blockNumber = try await service.getLatestBlockNumber()
@@ -74,7 +64,7 @@ if let usdcAddress = config.usdcAddress {
 ### Raw JSON-RPC Calls
 
 ```swift
-let client = JSONRPCClient(rpcURLString: "https://mainnet.infura.io/v3/YOUR_KEY")!
+let client = JSONRPCClient(rpcURLString: "https://ethereum-rpc.publicnode.com")!
 
 // Simple call
 let blockNumber: String = try await client.call(method: "eth_blockNumber")
