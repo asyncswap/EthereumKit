@@ -227,6 +227,8 @@ Run tests using Swift Testing:
 
 ```bash
 swift test
+# or
+RUN_NETWORK_TESTS=1 swift test
 ```
 
 Or in Xcode: `Cmd + U`
