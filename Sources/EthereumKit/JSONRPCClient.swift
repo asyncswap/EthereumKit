@@ -147,6 +147,16 @@ public actor JSONRPCClient {
     /// Convenience initializer with string URL
     public init?(rpcURLString: String, session: URLSession = .shared) {
         guard let url = URL(string: rpcURLString) else { return nil }
+
+        guard let scheme = url.scheme?.lowercased(),
+        scheme == "http" || scheme == "https" else {
+            return nil
+        }
+
+        guard url.host != nil else {
+            return nil
+        }
+
         self.rpcURL = url
         self.session = session
     }
