@@ -8,11 +8,13 @@ struct JSONRPCBasicTests {
     // MARK: - Network Tests (disabled by default)
     // Set RUN_NETWORK_TESTS=1 to enable these tests
     
+    // Using Ankr's free public endpoint (more reliable than Cloudflare)
+    private static let testRPCURL = "https://ethereum-rpc.publicnode.com"
+    
     @Test("Get current block number from real network",
           .enabled(if: ProcessInfo.processInfo.environment["RUN_NETWORK_TESTS"] == "1"))
     func testRealEthBlockNumber() async throws {
-        // Using public Cloudflare Ethereum endpoint (no API key needed)
-        guard let client = JSONRPCClient(rpcURLString: "https://cloudflare-eth.com") else {
+        guard let client = JSONRPCClient(rpcURLString: Self.testRPCURL) else {
             Issue.record("Failed to create client")
             return
         }
@@ -36,27 +38,32 @@ struct JSONRPCBasicTests {
     @Test("Get balance for a known address",
           .enabled(if: ProcessInfo.processInfo.environment["RUN_NETWORK_TESTS"] == "1"))
     func testRealEthGetBalance() async throws {
-        guard let client = JSONRPCClient(rpcURLString: "https://cloudflare-eth.com") else {
+        guard let client = JSONRPCClient(rpcURLString: Self.testRPCURL) else {
             Issue.record("Failed to create client")
             return
         }
         
-        // Ethereum Foundation address (public, well-known)
-        let ethFoundation = "0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe"
+        // Vitalik's address (public, well-known)
+        let vitalik = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
         
-        let balance = try await client.eth_getBalance(address: ethFoundation)
+        let balance = try await client.eth_getBalance(address: vitalik)
         
         // Verify response format
         #expect(balance.hasPrefix("0x"), "Balance should start with 0x")
         #expect(balance.isValidHex, "Balance should be valid hex")
         
-        print("✓ Balance for \(ethFoundation): \(balance)")
+        print("✓ Balance for \(vitalik): \(balance)")
+        
+        // Convert to Ether for readability
+        if let ether = balance.weiToEther {
+            print("  = \(ether) ETH")
+        }
     }
     
     @Test("Get chain ID from network",
           .enabled(if: ProcessInfo.processInfo.environment["RUN_NETWORK_TESTS"] == "1"))
     func testRealEthChainId() async throws {
-        guard let client = JSONRPCClient(rpcURLString: "https://cloudflare-eth.com") else {
+        guard let client = JSONRPCClient(rpcURLString: Self.testRPCURL) else {
             Issue.record("Failed to create client")
             return
         }
@@ -68,7 +75,7 @@ struct JSONRPCBasicTests {
         
         // Should be 0x1 for Ethereum mainnet
         if let chainIdInt = chainId.hexToInt {
-            #expect(chainIdInt == 1, "Cloudflare endpoint should return chain ID 1 (mainnet)")
+            #expect(chainIdInt == 1, "Ankr endpoint should return chain ID 1 (mainnet)")
             print("✓ Chain ID: \(chainIdInt)")
         }
     }
@@ -76,7 +83,7 @@ struct JSONRPCBasicTests {
     @Test("Get gas price from network",
           .enabled(if: ProcessInfo.processInfo.environment["RUN_NETWORK_TESTS"] == "1"))
     func testRealEthGasPrice() async throws {
-        guard let client = JSONRPCClient(rpcURLString: "https://cloudflare-eth.com") else {
+        guard let client = JSONRPCClient(rpcURLString: Self.testRPCURL) else {
             Issue.record("Failed to create client")
             return
         }
@@ -97,19 +104,19 @@ struct JSONRPCBasicTests {
     @Test("Test ERC-20 USDC balance call (read-only)",
           .enabled(if: ProcessInfo.processInfo.environment["RUN_NETWORK_TESTS"] == "1"))
     func testRealERC20Call() async throws {
-        guard let client = JSONRPCClient(rpcURLString: "https://cloudflare-eth.com") else {
+        guard let client = JSONRPCClient(rpcURLString: Self.testRPCURL) else {
             Issue.record("Failed to create client")
             return
         }
         
         // USDC contract on Ethereum mainnet
         let usdcContract = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-        // Binance wallet (known to have USDC)
-        let binanceWallet = "0xF977814e90dA44bFA03b6295A0616a897441aceC"
+        // Vitalik's address (likely has some USDC)
+        let vitalik = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
         
         // ERC-20 balanceOf function
         let functionSelector = "0x70a08231"
-        let paddedAddress = HexUtils.padAddress(binanceWallet)
+        let paddedAddress = HexUtils.padAddress(vitalik)
         let data = functionSelector + paddedAddress
         
         let result = try await client.eth_call(to: usdcContract, data: data)
@@ -128,7 +135,7 @@ struct JSONRPCBasicTests {
     @Test("Test multiple concurrent RPC calls",
           .enabled(if: ProcessInfo.processInfo.environment["RUN_NETWORK_TESTS"] == "1"))
     func testConcurrentCalls() async throws {
-        guard let client = JSONRPCClient(rpcURLString: "https://cloudflare-eth.com") else {
+        guard let client = JSONRPCClient(rpcURLString: Self.testRPCURL) else {
             Issue.record("Failed to create client")
             return
         }
@@ -154,7 +161,7 @@ struct JSONRPCBasicTests {
     @Test("Test error handling for invalid address",
           .enabled(if: ProcessInfo.processInfo.environment["RUN_NETWORK_TESTS"] == "1"))
     func testInvalidAddressError() async throws {
-        guard let client = JSONRPCClient(rpcURLString: "https://cloudflare-eth.com") else {
+        guard let client = JSONRPCClient(rpcURLString: Self.testRPCURL) else {
             Issue.record("Failed to create client")
             return
         }
@@ -178,7 +185,7 @@ struct JSONRPCBasicTests {
     
     @Test("Create JSONRPCClient with URL string")
     func testClientCreation() {
-        let client = JSONRPCClient(rpcURLString: "https://mainnet.infura.io/v3/test")
+        let client = JSONRPCClient(rpcURLString: "https://ethereum-rpc.publicnode.com")
         #expect(client != nil, "Should create client with valid URL")
         
         let invalidClient = JSONRPCClient(rpcURLString: "not a url")
