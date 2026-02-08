@@ -181,15 +181,13 @@ public struct NetworkConfig {
     
     // MARK: - Mainnet Networks
     
-    public static func mainnet(apiKey: String) -> NetworkConfig {
-        NetworkConfig(
-            name: "Ethereum Mainnet",
-            rpcURL: "https://rpc.flashbots.net/fast",
-            chainId: 1,
-            usdcAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-            explorerURL: "https://etherscan.io"
-        )
-    }
+    public static let mainnet = NetworkConfig(
+        name: "Ethereum Mainnet",
+        rpcURL: "https://rpc.flashbots.net/fast",
+        chainId: 1,
+        usdcAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        explorerURL: "https://etherscan.io"
+    )
 
     public static let unichain = NetworkConfig(
         name: "Unichain",
@@ -233,25 +231,21 @@ public struct NetworkConfig {
     )
     
     // MARK: - Testnet Networks
-    public static func sepolia(apiKey: String) -> NetworkConfig {
-        NetworkConfig(
-            name: "Sepolia Testnet",
-            rpcURL: "https://sepolia.infura.io/v3/\(apiKey)",
-            chainId: 11155111,
-            usdcAddress: nil,
-            explorerURL: "https://sepolia.etherscan.io"
-        )
-    }
+    public static let sepolia = NetworkConfig(
+        name: "Sepolia Testnet",
+        rpcURL: "https://ethereum-sepolia-rpc.publicnode.com",
+        chainId: 11155111,
+        usdcAddress: nil,
+        explorerURL: "https://sepolia.etherscan.io"
+    )
     
-    public static func unichain_sepolia(apiKey: String) -> NetworkConfig {
-        NetworkConfig(
-            name: "Sepolia Testnet",
-            rpcURL: "https://sepolia.unichain.org",
-            chainId: 1301,
-            usdcAddress: nil,
-            explorerURL: "https://sepolia.uniscan.xyz"
-        )
-    }
+    public static let unichain_sepolia = NetworkConfig(
+        name: "Sepolia Testnet",
+        rpcURL: "https://sepolia.unichain.org",
+        chainId: 1301,
+        usdcAddress: nil,
+        explorerURL: "https://sepolia.uniscan.xyz"
+    )
 }
 
 // MARK: - Errors
