@@ -4,13 +4,13 @@ A modern, Swift-native Ethereum JSON-RPC client built with Swift Concurrency (as
 
 ## Features
 
-- ✅ **Pure Swift** - No JavaScript bridges or web3.js dependencies
+- ✅ **Pure Swift**
 - ✅ **Swift Concurrency** - Built with async/await and actors
 - ✅ **Type-Safe** - Full Codable support with compile-time safety
 - ✅ **Cross-Platform** - Works on iOS 16+, macOS 13+, watchOS 9+, tvOS 16+
 - ✅ **Lightweight** - Zero external dependencies
 - ✅ **ERC-20 Support** - Built-in helpers for token interactions
-- ✅ **Network Configs** - Pre-configured for popular networks (Ethereum, Polygon, Arbitrum, Base, Optimism)
+- ✅ **Network Configs** - Pre-configured for popular networks (Ethereum, Polygon, Arbitrum, Base, Optimism, Unichain)
 
 ## Installation
 
@@ -20,7 +20,7 @@ Add EthereumKit to your project:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourusername/EthereumKit.git", from: "1.0.0")
+    .package(url: "https://github.com/asyncswap/EthereumKit.git", from: "1.0.0")
 ]
 ```
 
